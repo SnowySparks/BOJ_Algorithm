@@ -3,8 +3,7 @@
 #include <algorithm>
 #include <queue>
 using namespace std;
-const int inf = 1e6+1;
-const int mv = 1e8;
+const int inf = 1e5+1;
 using pii = pair<int, int>;
 int n;
 pii arr[inf];
