@@ -111,13 +111,13 @@ int main(void) {
         }
 
         //1회이상 시도
+        //K-1까지만 탐색 -> 이유 : K번 스왑은 어차피 무조건 되는걸로 보장하니까
         int cntp = 1;
-        while (cntp <= D) {
+        while (cntp <= K-1) {
             backtracking(0,0,cntp);
             if (fd) break;
             ++cntp;
         }
-
         cout << '#' << tc <<' ' << cntp << '\n';
     }
 
