@@ -37,41 +37,39 @@ def allcheck() -> bool: #모든 열에 대해서 체크
             return False
     return True
 
+def backtracking(idx, cnt, max_val):
+    global CHECKED
+    if CHECKED : return
+    if cnt == max_val:
+        if allcheck():
+            CHECKED = True
+        return
+    if CHECKED : return
+    for i in range(idx, D):
+        change_row[i] = A
+        backtracking(i+1, cnt+1, max_val)
+        change_row[i] = B
+        backtracking(i+1, cnt+1, max_val)
+        change_row[i] = EMPTY
+    return
+
 
 T = int(input())
 for tc in range(1, T+1):
+    #초기화
     CHECKED = False
     #input
     D, W, K = map(int,input().split()) #두께, 너비, 연속길이 수
     arr =[ list(map(int,input().split())) for _ in range(D) ]
     change_row = [EMPTY] * D #약품 주입 칸
     
-    allcheck()
-    
     if (allcheck()): #약품 처리 안하고 성공하면 그 즉시 다음 테스트 케이스로
         print(f'#{tc} 0')
         continue
     
-    cnt = 1
-    while cnt < K:
-        for lst in combinations(range(D), cnt): #순열 도면서 모든 경우의 수 탐색
-            #비트마스킹 이용하면서 A, B에 대한 약품처리 모든 경우의 수 탐색
-            for i in range( (1<<cnt) ):
-                for j in range(cnt):
-                    if i & (1<<j) : 
-                        change_row[lst[j]] = B
-                    else:
-                        change_row[lst[j]] = A
-                
-                if allcheck(): #확인시 그 즉시 종료
-                    CHECKED = True
-                    break
-            if CHECKED:
-                break
-            #원복
-            for val in lst:
-                change_row[val] = EMPTY
-        if CHECKED:
-            break
-        cnt += 1
-    print(f'#{tc} {cnt}')
+    ans = 1
+    while ans < K:
+        backtracking(0, 0, ans)
+        if (CHECKED) : break
+        ans += 1
+    print(f'#{tc} {ans}')
