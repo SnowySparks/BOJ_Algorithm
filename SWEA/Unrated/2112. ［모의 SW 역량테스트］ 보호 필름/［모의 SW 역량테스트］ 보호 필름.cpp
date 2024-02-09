@@ -51,37 +51,25 @@ bool allcheck(void) { //모든 행에 대한 체크
 }
 
 //backtracking 구현
-int num[13] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 vector<int> lst;
 bool fd = false;
 void backtracking(int idx, int cnt, int change_val) {
     if (fd) return; //이미 탐색성공한 경우 지체없이 종료
     if (cnt == change_val) {
-        //선택된 열에 대해서 가능한 모든 A, B 선택탐색
-        for (int i = 0 ; i < (1<<change_val); ++i) {
-            int tmp = i;
-            for (int j = 0 ; j < change_val ; ++j) {
-                if (tmp&1) change_row[lst[j]] = B;
-                else change_row[lst[j]] = A;
-                tmp>>=1;
-            }
-            //만약 선택된 방법이 통과가 되면 그 즉시 통과 등록후 종료
-            if (allcheck()) {
-                fd = true;
-                return;
-            }
-        }
-        for (int val : lst) {
-            change_row[val] = NONE; 
+        //합당한 조합인 경우 탐색 성공 표시
+        if (allcheck()) {
+            fd = true;
         }
         return;
     }
-    if (fd) return;
+    if (fd) return; //탐색 성공시 그 즉시 종료 
     for (int i = idx; i < D; ++i) {
-        if (fd) return;
-        lst.push_back(num[i]);
-        backtracking(i+1, cnt+1, change_val);
-        lst.pop_back();
+        //백트래킹으로 선택되는 위치 및 선택되는 값을 선택
+        change_row[i] = A;
+        backtracking(i+1,cnt+1,change_val);
+        change_row[i] = B;
+        backtracking(i+1,cnt+1,change_val);
+        change_row[i] = NONE;
     }
     return;
 }
