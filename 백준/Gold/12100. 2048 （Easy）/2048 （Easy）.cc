@@ -9,18 +9,19 @@ int ans = 0;
 const int max_move = 5;
 void move_left(vector<vector<int> > &lst) {
     deque<int> dq;
-    deque<bool> dq_bool;
+    bool dq_bool = false;
     for (int r = 0; r < n; ++r) {
-        dq_bool.clear();
+        dq_bool = false;
         for (int c = 0; c < n; ++c) {
             if (lst[r][c] != 0) {
-                if (dq.empty() || dq.back() != lst[r][c] || dq_bool.back()) {
+                if (dq.empty() || dq.back() != lst[r][c] || dq_bool) {
                     dq.push_back(lst[r][c]);
-                    dq_bool.push_back(false);
+                    dq_bool = false;
+
                 }
-                else if (dq_bool.back() == false) {
+                else if (!dq_bool) {
                     *dq.rbegin() *= 2;
-                    *dq_bool.rbegin() = true;
+                    dq_bool = true;
                 }
             }
             lst[r][c] = 0;
@@ -36,18 +37,18 @@ void move_left(vector<vector<int> > &lst) {
 
 void move_right(vector<vector<int> > &lst) {
     deque<int> dq;
-    deque<bool> dq_bool;
+    bool dq_bool = false;
     for (int r = 0; r < n; ++r) {
-        dq_bool.clear();
+        dq_bool = false;
         for (int c = n-1; c >= 0; --c) {
             if (lst[r][c] != 0) {
-                if (dq.empty() || dq.front() != lst[r][c] || dq_bool.front()) {
+                if (dq.empty() || dq.front() != lst[r][c] || dq_bool) {
                     dq.push_front(lst[r][c]);
-                    dq_bool.push_front(false);
+                    dq_bool = false;
                 }
-                else if (dq_bool.front() == false) {
+                else if (dq_bool == false) {
                     *dq.begin() *= 2;
-                    *dq_bool.begin() = true;
+                    dq_bool = true;
                 }
             }
             lst[r][c] = 0;
@@ -63,18 +64,18 @@ void move_right(vector<vector<int> > &lst) {
 
 void move_up(vector<vector<int> > &lst) {
     deque<int> dq;
-    deque<bool> dq_bool;
+    bool dq_bool = false;
     for (int c = 0; c < n; ++c) {
-        dq_bool.clear();
+        dq_bool = false;
         for (int r = 0; r < n; ++r) {
             if (lst[r][c]) {
-                if (dq.empty() || dq.back() != lst[r][c] || dq_bool.back()) {
+                if (dq.empty() || dq.back() != lst[r][c] || dq_bool) {
                     dq.push_back(lst[r][c]);
-                    dq_bool.push_back(false);
+                    dq_bool = false;
                 }
-                else if (dq_bool.back() == false) {
+                else if (dq_bool == false) {
                     *dq.rbegin() *= 2;
-                    *dq_bool.rbegin() = true;
+                    dq_bool = true;
                 }
             }
             lst[r][c] = 0;
@@ -90,18 +91,18 @@ void move_up(vector<vector<int> > &lst) {
 
 void move_down(vector<vector<int> > &lst) {
     deque<int> dq;
-    deque<bool> dq_bool;
+    bool dq_bool = false;
     for (int c = 0; c < n; ++c) {
-        dq_bool.clear();
+        dq_bool =false;
         for (int r = n-1; r >= 0; --r) {
             if (lst[r][c]) {
-                if (dq.empty() || dq.front() != lst[r][c] || dq_bool.front()) {
+                if (dq.empty() || dq.front() != lst[r][c] || dq_bool) {
                     dq.push_front(lst[r][c]);
-                    dq_bool.push_front(false);
+                    dq_bool = false;
                 }
-                else if (dq_bool.front() == false) {
+                else if (dq_bool == false) {
                     *dq.begin() *= 2;
-                    *dq_bool.begin() = true;
+                    dq_bool = true;
                 }
             }
             lst[r][c] = 0;
@@ -151,26 +152,25 @@ void dfs(int cnt, vector<vector<int> > a) {
         return;
     }
     int now_max = max_val(a);
-    if (now_max * (1 << (max_move - cnt) ) <= ans ) return;
     vector<vector<int> > backup(a);
 
     move_left(a);
-    if (!issame(a, backup)) {
+    if (!issame(a, backup) && max_val(a) * (1 << (max_move - (cnt+1))) > ans ) {
         dfs(cnt+1, a);
     }
     copy(backup.begin(), backup.end(), a.begin());
     move_right(a);
-    if (!issame(a, backup)) {
+    if (!issame(a, backup) && max_val(a) * (1 << (max_move - (cnt+1))) > ans )  {
         dfs(cnt+1, a);
     }
     copy(backup.begin(), backup.end(), a.begin());
     move_up(a);
-    if (!issame(a, backup)) {
+    if (!issame(a, backup) && max_val(a) * (1 << (max_move - (cnt+1))) > ans )  {
         dfs(cnt+1, a);
     }
     copy(backup.begin(), backup.end(), a.begin());
     move_down(a);
-    if (!issame(a, backup)) {
+    if (!issame(a, backup) && max_val(a) * (1 << (max_move - (cnt+1))) > ans )  {
         dfs(cnt+1, a);
     }
     copy(backup.begin(), backup.end(), a.begin());
