@@ -14,9 +14,10 @@ vector<int> b;
 
 int cook(const vector<int> &r) {
     int res = 0;
-    for (int a : r) {
-        for (int b : r) {
-            res += arr[a][b];
+    f(i, 0, n/2-1) {
+        f(j, i+1, n/2) {
+            res += arr[r[i]][r[j]];
+            res += arr[r[j]][r[i]];
         }
     }
     return res;
