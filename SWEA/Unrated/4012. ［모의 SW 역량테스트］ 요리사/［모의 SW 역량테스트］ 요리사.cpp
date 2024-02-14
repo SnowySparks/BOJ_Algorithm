@@ -9,14 +9,8 @@ int n;
 bool isv[16];
 int ans;
 
-
-vector<int> select(bool st) {
-    vector<int> r;
-    f(i, 0, n) {
-        if (isv[i] == st) r.push_back(i);
-    }
-    return r;
-}
+vector<int> a;
+vector<int> b;
 
 int cook(const vector<int> &r) {
     int res = 0;
@@ -30,8 +24,13 @@ int cook(const vector<int> &r) {
 
 void back_track(int idx, int cnt) {
     if (cnt == n/2) {
-        vector<int> s1 = select(false), s2 = select(true);
-        ans = min(ans, abs(cook(s1) - cook(s2)));
+        a.clear();
+        b.clear();
+        f(i, 0, n) {
+            if (isv[i]) a.push_back(i);
+            else b.push_back(i);
+        }
+        ans = min(ans, abs(cook(a)-cook(b)));
         return;
     }
 
