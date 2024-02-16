@@ -41,13 +41,11 @@ int simulation(int cr, int cc) {
         nc = cc;
         dir = i;
         cnt = 0;
-        bool mved = false;
         while (true) {
             nr += dr[dir]; nc += dc[dir];
-            // cout << nr << ' ' << nc << ' ' << dir << ' ' << cnt <<'\n';
             int blk_state = arr[nr][nc];
             //원점복귀
-            if (nr == cr && nc == cc && mved) {
+            if (nr == cr && nc == cc) {
                 res = max(res,cnt);
                 break;
             }
@@ -58,7 +56,6 @@ int simulation(int cr, int cc) {
             }
             //warp
             if (blk_state >= 6) {
-                mved = true;
                 if (nr == wp[blk_state][0][0] && nc == wp[blk_state][0][1]) {
                     nr = wp[blk_state][1][0]; nc = wp[blk_state][1][1];
                 }
@@ -74,11 +71,9 @@ int simulation(int cr, int cc) {
                     break;
                 }
                 else {
-                    mved = true;
                     ++cnt;
                 }
             }
-            mved = true;
         }
     }
     return res;
