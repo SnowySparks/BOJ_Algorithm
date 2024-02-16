@@ -43,6 +43,7 @@ int simulation(int cr, int cc) {
         cnt = 0;
         while (true) {
             nr += dr[dir]; nc += dc[dir];
+            if (arr[nr][nc] == 0 && cnt == 0) break;
             int blk_state = arr[nr][nc];
             //원점복귀
             if (nr == cr && nc == cc) {
