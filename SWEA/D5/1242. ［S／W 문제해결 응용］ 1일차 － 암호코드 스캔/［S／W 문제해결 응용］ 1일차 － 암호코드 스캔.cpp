@@ -12,60 +12,53 @@ unordered_set<string> used_code;
 
 //코드 길이 비, 순서대로 1, 0, 1의 길이
 //가장 맨앞 0은 어차피 생각해보니 굳이... 탐색 할 필요가 없었네? 어
-unordered_map<string, char> codelst = {
-    {"211", '0'},
-    {"221", '1'},
-    {"122", '2'},
-    {"411", '3'},
-    {"132", '4'},
-    {"231", '5'},
-    {"114", '6'},
-    {"312", '7'},
-    {"213", '8'},
-    {"112", '9'},
+int code_lst[5][5][5];
+int input_bincode[8];
+int hex_to_bin[16][4] {
+    {0, 0, 0, 0}, //0
+    {0, 0, 0, 1}, //1
+    {0, 0, 1, 0}, //2
+    {0, 0, 1, 1}, //3
+    {0, 1, 0, 0}, //4
+    {0, 1, 0, 1}, //5
+    {0, 1, 1, 0}, //6
+    {0, 1, 1, 1}, //7
+    {1, 0, 0, 0}, //8
+    {1, 0, 0, 1}, //9
+    {1, 0, 1, 0}, //A
+    {1, 0, 1, 1}, //B
+    {1, 1, 0, 0}, //C
+    {1, 1, 0, 1}, //D
+    {1, 1, 1, 0}, //E
+    {1, 1, 1, 1}, //F
 };
 
-unordered_map<char, string> hex_to_bin {
-    {'0',"0000"},
-    {'1',"0001"},
-    {'2',"0010"},
-    {'3',"0011"},
-    {'4',"0100"},
-    {'5',"0101"},
-    {'6',"0110"},
-    {'7',"0111"},
-    {'8',"1000"},
-    {'9',"1001"},
-    {'A',"1010"},
-    {'B',"1011"},
-    {'C',"1100"},
-    {'D',"1101"},
-    {'E',"1110"},
-    {'F',"1111"},
-};
+short bin[2000][2000];
 
-
-int correct_code (const string &code) {
-    if ((int)code.size() != 8 ) return 0;
-    int r1 = 0, r2 = 0, r3 = code[7] - '0';
-    for (int i = 0; i <= 6; i+=2) r1 += (code[i] - '0');
-    for (int i = 1; i <7; i+=2) r2 += (code[i] - '0');
-    if ((r1*3 + r2 + r3)%10==0) return r1 + r2 + r3;
-    else return 0;
-
+int hex_to_ten(const char &ch) {
+    if (ch >='0' && ch <= '9') return ch - '0';
+    else return ch - 'A' + 10;
 }
 
-int check_code(const string &bin) {
+int correct_code(void) {
+    int r1 = input_bincode[0] + input_bincode[2] + input_bincode[4] + input_bincode[6];
+    int r2 = input_bincode[1] + input_bincode[3] + input_bincode[5];
+    int r3 = input_bincode[7];
+    if ((r1*3 + r2 + r3) %10 == 0) return r1 + r2 + r3;
+    return 0;
+}
+
+int check_code(int r) {
     int res = 0;
     int n3 = 0, n2 = 0, n1 = 0;
     int idx = 4*m -1;
-    string complete_code = "";
+    int ans_idx = 7;
     while (idx >= 0) {
-        if (bin[idx] == '1') {
+        if (bin[r][idx] == 1 &&bin[r-1][idx] == 0 ) {
             n3 = 0; n2 = 0; n1 = 0;
-            while (bin[idx] == '1') {++n3; --idx;}
-            while (bin[idx] == '0') {++n2; --idx;}
-            while (bin[idx] == '1') {++n1; --idx;}
+            while (bin[r][idx] == 1) {++n3; --idx;}
+            while (bin[r][idx] == 0) {++n2; --idx;}
+            while (bin[r][idx] == 1) {++n1; --idx;}
             ++idx;
 
             int min_val = min(n3, min(n2, n1));
@@ -73,20 +66,15 @@ int check_code(const string &bin) {
             n2 /= min_val;
             n1 /= min_val;
             
-            string c1 = to_string(100 *n1 + 10*n2 + n3);
-            if (codelst.find(c1) == codelst.end()) {
-                complete_code.clear();
+            int code_r = code_lst[n1][n2][n3];
+            if (code_r == -1) {
+                ans_idx = 7;
             }
             else {
-                complete_code.push_back(codelst[c1]);
-                if ((int)complete_code.size() == 8) {
-                    if (used_code.find(complete_code) == used_code.end()) {
-                        used_code.insert(complete_code);
-                        // cout << complete_code << '\n';
-                        reverse(complete_code.begin(), complete_code.end());
-                        res += correct_code(complete_code);
-                    }
-                    complete_code.clear();
+                input_bincode[ans_idx--] = code_r;
+                if (ans_idx == -1) {
+                    res += correct_code();
+                    ans_idx = 7;
                 }
             }
         }
@@ -97,23 +85,34 @@ int check_code(const string &bin) {
 
 int main(void) {
     ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+    f(i, 0, 5) f(j, 0, 5) f(k, 0, 5) code_lst[i][j][k] = -1;
+    code_lst[2][1][1] = 0;
+    code_lst[2][2][1] = 1;
+    code_lst[1][2][2] = 2;
+    code_lst[4][1][1] = 3;
+    code_lst[1][3][2] = 4;
+    code_lst[2][3][1] = 5;
+    code_lst[1][1][4] = 6;
+    code_lst[3][1][2] = 7;
+    code_lst[2][1][3] = 8;
+    code_lst[1][1][2] = 9;
     // freopen("input.txt","r",stdin);
+
+
     int T; cin >> T;
     string inp;
     f(tc, 1, T + 1) {
         int ans = 0;
         cin >> n >> m;
-        used_code.clear();
         f(r, 0, n) {
-            string binary = "";
             cin >> inp;
-            //이진수 변환
-            for (char hex : inp) {
-                binary += hex_to_bin[hex];
+            f(c, 0, m) {
+                for (int idx = 4*c; idx < (4*(c+1)) ; ++idx) {
+                    bin[r][idx] = hex_to_bin[hex_to_ten(inp[c])][idx - 4*c];
+                }
             }
-            //가장 뒤에서 부터 탐색
-            ans += check_code(binary);
         }
+        f(r, 1, n) ans +=check_code(r);
         cout << '#' <<tc <<' '<<ans <<'\n';
     }
     return 0;
