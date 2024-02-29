@@ -25,7 +25,7 @@ int dijkstra(int start = 1,int end = n, const pair<int ,int> &b_path = {-1, -1})
         for (auto &[nxt, add_cost] : gh[node]) {
             int nxt_cost = cost + add_cost;
             if (b_path.first == node && b_path.second == nxt || b_path.first == nxt && b_path.second == node) continue;
-            if (dist[nxt] < nxt_cost) continue;
+            if (dist[nxt] <= nxt_cost) continue;
             path[nxt] = node;
             dist[nxt] = nxt_cost;
             pq.push({-nxt_cost, nxt});
