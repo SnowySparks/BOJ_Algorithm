@@ -18,7 +18,7 @@ void dfs(int r, int c, int len, int dir) {
     if (r== sr &&  c == sc) ans = max(ans, len); // 원점 도달시 종료
     if (v[arr[r][c]]) return; //이미 만난 값이면 종료
 
-    if (dir >= 2 && (len+1)*2 <= ans) return;
+    if (dir >= 2 && (len)*2 <= ans) return;
     //지금 여기 방문처리
     v[arr[r][c]] = true;
 
