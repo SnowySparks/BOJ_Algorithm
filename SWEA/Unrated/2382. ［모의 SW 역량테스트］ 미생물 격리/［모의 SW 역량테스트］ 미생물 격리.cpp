@@ -27,25 +27,34 @@ int main(void) {
     for (int tc = 1; tc <= T; ++tc) {
         cin >> n >> m >> k;
         int time = 0;
+        int before = k;
+        int left = k;
+        bool change=false;
         for (int i = 1; i <= k; ++i) {
             cin >> dat[i].r >> dat[i].c >> dat[i].cells >> dat[i].dir;
         }
-
+        sort(dat+1, dat+1+left, greater<>());
         while (time < m)
         {
             memset(arr, 0, sizeof(arr));
-            sort(dat+1, dat+1+k, greater<>()); //매번 가장 큰 것부터 이동
+            if (change) sort(dat+1, dat+1+before, greater<>());
+            change = false;
+            before = left;
             for (int i = 1; i <= k; ++i) {
                 if (dat[i].cells == 0) break; // 0값은 무시하기
                 dat[i].r += mv[dat[i].dir][0]; dat[i].c += mv[dat[i].dir][1];
                 if (dat[i].r == 0 || dat[i].r == n-1 || dat[i].c == 0 || dat[i].c == n-1) {
                     dat[i].cells /= 2;
+                    change = true;
                     if (dat[i].dir == 1) dat[i].dir = 2;
                     else if (dat[i].dir == 2) dat[i].dir = 1;
                     else if (dat[i].dir == 3) dat[i].dir = 4;
                     else dat[i].dir = 3;
                 }
-                if (dat[i].cells > -1) {
+                if (dat[i].cells == 0) {
+                    --left;
+                }
+                else {
                     if (arr[dat[i].r][dat[i].c] == 0) {
                         arr[dat[i].r][dat[i].c] = i;
                     }
@@ -53,6 +62,8 @@ int main(void) {
                         int idx = arr[dat[i].r][dat[i].c]; //더 큰
                         dat[idx].cells += dat[i].cells;
                         dat[i].cells = 0;
+                        change = true;
+                        --left;
                     }
                 }
             }
