@@ -5,39 +5,41 @@
 #include <unordered_map>
 using namespace std;
 
+char numlst[10000][11];
+
 // 트라이 기본 구조
 struct Trie {
-    bool isend = false;
-    Trie* num[10];
+    bool isend= false;
+    Trie *child[10];
 
     Trie() {
-        memset(num, 0, sizeof(num));
+        memset(child, 0, sizeof(child));
     }
     ~Trie() {
         for (int i = 0; i < 10; ++i) {
-            if (num[i]) delete num[i];
+            if (child[i]) delete child[i];
         }
     }
 
-    void insert(const string &n, int idx = 0) {
-        if (idx == (int)n.size()) {
+    void insert(char *ch) {
+        if (*ch == '\0') {
             isend = true;
             return;
+        } 
+        else {
+            int idx = *ch - '0';
+            if (child[idx] == 0) child[idx] = new Trie();
+            child[idx]->insert(ch + 1);
         }
-        int nidx = n[idx] - '0';
-        Trie *tr = new Trie;
-        num[nidx] = tr;
-        tr->insert(n, idx + 1);
     }
 
-    bool find(const string &other, int idx=0) {
-        if (idx == (int)other.size()) return true;
+    bool find(char *ch) {
+        if ( *ch == '\0') return true;
         if (isend) return false;
-        int nidx = other[idx]-'0';
-        if (num[nidx] == 0) return true;
-        return num[nidx]->find(other, idx + 1);
+        int idx = *ch - '0';
+        if (child[idx] == 0) return true;
+        return child[idx]->find(ch + 1);
     }
-
 };
 
 int main(void) {
@@ -46,19 +48,19 @@ int main(void) {
     while (T--)
     {
         int n; cin >> n;
-        Trie* root = new Trie;
-        vector<string> s(n);
-        for (int i = 0; i < n; ++i) cin >> s[i];
-        sort(s.begin(),s.end());
+        Trie *root = new Trie();
+        for (int i = 0; i <n; ++i) {
+            cin >> numlst[i];
+            root->insert(numlst[i]);
+        }
         bool can = true;
-        for (const string &val : s) {
-            if (root->find(val)) root->insert(val);
-            else {
+        for (int i = 0; i < n ; ++i) {
+            if (root->find(numlst[i]) == false) {
                 can = false;
                 break;
             }
         }
-        cout << (can ? "YES" : "NO") <<'\n';
+        cout << (can ? "YES" : "NO") << '\n';
     }
     return 0;
 }
