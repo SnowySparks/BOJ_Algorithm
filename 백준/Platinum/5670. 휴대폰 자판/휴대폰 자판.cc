@@ -3,7 +3,7 @@
 #include <cstring>
 #include <algorithm>
 #include <cmath>
-#include <unordered_map>
+#include <map>
 using namespace std;
 
 char lst[100000][81];
@@ -11,7 +11,7 @@ int temp = 0;
 struct Trie {
     bool isend = false;
     bool isroot = false;
-    unordered_map<char, Trie*> child;
+    map<char, Trie*> child;
     Trie(bool isroot = false) : isroot(isroot) {}
     ~Trie() {
         for (auto it : child) {
