@@ -5,8 +5,8 @@ using namespace std;
 #define maxn 1000
 #define dmaxn 1000000
 using ll = long long;
-ll arr[maxn];
-ll darr[dmaxn];
+int arr[maxn];
+int darr[dmaxn];
 
 int main(void) {
     ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -15,6 +15,7 @@ int main(void) {
     int cnt = 0;
     for (int i = 0; i < n ; ++i) {
         for (int j = 0; j < n; ++j) {
+            if (arr[i]+arr[j] <= 0) continue; //overflow대상. 
             darr[cnt++] = arr[i]+arr[j];
         }
     }
