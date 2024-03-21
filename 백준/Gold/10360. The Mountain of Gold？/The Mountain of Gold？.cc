@@ -18,6 +18,7 @@ int main() {
 	for (int tc = 1; tc <= T; tc++) {
 		cin >> n >> m;
         
+        // 초기화
         memset(check, 0, sizeof(check));
         memset(v, 0, sizeof(v));
         for(int i = 0; i < n; ++i) {
@@ -26,12 +27,14 @@ int main() {
             dist[i] = INF;
         }
 
+        // 간선 및 역방향 간선 입력
 		while (m--) {
 			int a, b, c; cin >> a >> b >> c;
 			adj[a].push_back({ b, c });
 			rev[b].push_back(a);
 		}
 
+        // 벨만 - 포드, 추가적으로 음의 사이클이 생기는 노드 체크
         dist[0] = 0;
 		for (int cnt = 0; cnt < n; cnt++) {
 			bool update = false;
@@ -44,6 +47,7 @@ int main() {
 			if (!update) break;
 		}
 
+        // 역방향 간선을 기준으로 0번부터 다른 음의 사이클로 갈 수 있는가 판단
 		v[0] = true;
 		queue<int> q; 
         q.push(0);
