@@ -1,53 +1,61 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#define INF 0x7f7f7f7f
-#define f(a, b, c) for (int a = b; a < c; ++a)
-using namespace std;
-int n, m, w;
 
-vector<pair<int ,int> > adj[501];
+using namespace std;
+
+vector<pair<pair<int, int>, int>> v;
 int dist[501];
-bool bell_ford(int start = 0) {
-    dist[start] = 0;
-    bool is_minus_cycle = false;
-    // N번 순회 , N번째에서 dist값 갱신이 있으면 사이클이 있는 것
-    for (int iter = 1; iter <= n; ++iter) {
-        for (int node = 1; node <= n; ++node) {
-            for (auto &[nxt, cost] : adj[node]) {
-                int new_cost = cost + dist[node];
-                if (new_cost < dist[nxt]) {
-                    dist[nxt] = new_cost;
-                    if (iter == n) is_minus_cycle = true;
-                }
-            }
+
+void bellmanFord(int n) {
+    for (int i = 0; i < n; i++) {
+        for (int pos = 0; pos < v.size(); pos++) {
+            int from = v[pos].first.first;
+            int to = v[pos].first.second;
+            int cost = v[pos].second;
+
+            if (dist[from] + cost < dist[to]) dist[to] = dist[from] + cost;
         }
     }
-    return is_minus_cycle;
+
+    for (int pos = 0; pos < v.size(); pos++) {
+        int from = v[pos].first.first;
+        int to = v[pos].first.second;
+        int cost = v[pos].second;
+        if (dist[from] + cost < dist[to]) {
+            cout << "YES\n";
+            return;
+        }
+    }
+
+    cout << "NO\n";
+
 }
 
 
 int main() {
     ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
     int tc; cin >> tc;
-    int s, e, t;
+
     while (tc--) {
-        cin >> n >> m >> w;
-        f(i, 1, n+1) dist[i] = INF;
-        f(i, 1, n+1) adj[i].clear();
-        // 길
-        f(i, 0, m) {
-            cin >> s >> e >> t;
-            adj[s].push_back({e, t});
-            adj[e].push_back({s, t});
+        v.clear();
+        int n, m, w; cin >> n >> m >> w;
+        for (int i = 1; i <= n; i++) dist[i] = 987654321;
+
+        for (int i = 0; i < m; i++) {
+            int from, to, cost; cin >> from >> to >> cost;
+            v.push_back({ {from,to},cost });
+            v.push_back({ {to,from},cost });
         }
-        // 웜홀
-        f(i, 0, w) {
-            cin >> s >> e >> t;
-            adj[s].push_back({e, -t});
+        for (int i = 0; i < w; i++) {
+
+            int from, to, cost; cin >> from >> to >> cost;
+            v.push_back({ {from,to},-cost });
         }
-        // cout <<"--\n";
-        cout << (bell_ford() ? "YES\n" : "NO\n");
+
+        bellmanFord(n);
     }
+
+
     return 0;
 }
