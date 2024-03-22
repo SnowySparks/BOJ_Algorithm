@@ -78,9 +78,8 @@ int main(void) {
     //도착점
     for (int i = 0; i < p; ++i) cin >> restaurant[i];
 
-    for (int i = 1 ; i <= n; ++i) {
-        if (!visit_order[i]) scc(i);
-    }
+    scc(s);
+    
     dp.resize(scc_cnt+1);
 
     //scc그룹 간 인접그래프 만들기
@@ -103,6 +102,7 @@ int main(void) {
         int scc_now = q.front(); q.pop();
         for (int &next_scc : scc_adj[scc_now]) {
             int res = dp[scc_now] + scc_cash[next_scc];
+            // 갱신할 가치가 있는 경우에만 다음 Queue 진행!!!!
             if (res > dp[next_scc]) {
                 dp[next_scc] = res;
                 q.push(next_scc);
