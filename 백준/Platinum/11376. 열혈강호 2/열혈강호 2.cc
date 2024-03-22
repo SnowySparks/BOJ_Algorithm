@@ -4,12 +4,13 @@
 #include <cstring>
 #define f(a, b, c) for(int a= b; a<c;++a)
 using namespace std;
-const int mv = 2e3+3;
-vector<int> adj[mv];
-int right_assign[mv]; 
-bool v[mv]; // 
+
+vector<int> adj[1001];
+int right_assign[1001]; 
+bool v[1001]; 
 
 bool dfs(int left_node) {
+    // cout << left_node <<'\n';
     for (int &right_node : adj[left_node]) { // 현재 왼쪽 노드랑 연결된 오른쪽 노드 전부 탐색
         if (v[right_node]) continue; //만약 한번이라도 해당 오른쪽 노드가 탐색 시도 한 기록 있음 종료
         v[right_node] = true; //지금 현재 오른쪽 노드를 탐색 시도 기록 남기기
@@ -32,20 +33,20 @@ int main(void) {
         cin >> cnt;
         f(k, 0, cnt) {
             cin >> tmp;
-            adj[2*i-1].push_back(tmp);
-            adj[2*i].push_back(tmp);
+            adj[i].push_back(tmp);
         }
     }
 
     int ans = 0;
     
-    for (int i = 1; i <= 2*n; ++i) {
-        memset(v, 0, sizeof(v));
-        if(dfs(i)) ++ans;
+    for (int i = 1; i <= n; ++i) {
+        f(k, 0, 2) {
+            memset(v, 0, sizeof(v));
+            if (dfs(i)) ++ans;
+        }
     }
     cout << ans;
     return 0;
 }
 
-// 단순하게 왼쪽 노드를 2배로 늘리고, (2*i, 2*i +1) 노드들은 전부 i 노드라고 생각하고
-// 해당 노드들와 연결되는 오른쪽노드 상태는 같음
+//왼쪽 노드를 2배로 늘리는 대신에 , dfs자가자신 2번 호출하는 방법도 됨
