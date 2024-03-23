@@ -7,11 +7,16 @@ const int mt = 2e6+2;
 int tree[3 * mt];
 int num, n;
 
-int update(int node, int l, int r, int loc) {
-    if (loc < l || r < loc) return tree[node];
-    if (l == r) return tree[node] = tree[node] + 1;
+void update(int node, int l, int r, int loc) {
+    if (loc < l || r < loc) return;
+    if (l == r) {
+        tree[node]++;
+        return;
+    }
+    ++tree[node];
     int mid = (l + r) >> 1;
-    return tree[node] = update(2*node, l, mid, loc) + update(2*node+1, mid+1, r, loc);
+    if (loc <= mid) update(2*node, l, mid, loc);
+    else return update(2*node+1, mid+1, r, loc);
 }
 
 int query(int node, int l, int r, int k) {
