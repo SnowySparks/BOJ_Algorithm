@@ -88,7 +88,7 @@ int main(void) {
         for (auto &[r, c] : dq) {
             gh[r][c] = temp[r][c];
         }
-        memset(temp,0,sizeof(temp));
+        
     }
     cout << year;
     return 0;
