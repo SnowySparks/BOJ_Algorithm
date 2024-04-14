@@ -3,13 +3,12 @@
 #include <cstring>
 #include <algorithm>
 using namespace std;
-using ll = long long;
 const int nmax = 1e5+1;
 const int inf = 4e5;
 int n, q;
 // 들어가는 값 : 해당 구간에서의 반전 호출 횟수. - 홀수인 경우 켜진 거고, 짝수인 경우 꺼진 거임 
-ll tree[inf];
-ll lazy[inf];
+int tree[inf];
+int lazy[inf];
 
 void lazy_update(int node, int l, int r) {
     if (lazy[node]) {
@@ -25,7 +24,7 @@ void lazy_update(int node, int l, int r) {
 }
 
 
-ll update(int node, int l, int r, int s, int e) {
+int update(int node, int l, int r, int s, int e) {
     lazy_update(node, l, r);
     if ( e < l || r < s) return tree[node];
     else if (s <= l && r <= e) {
@@ -39,7 +38,7 @@ ll update(int node, int l, int r, int s, int e) {
 }
 
 
-ll query(int node, int l, int r, int s, int e) {
+int query(int node, int l, int r, int s, int e) {
     lazy_update(node, l, r);
     if (s <= l && r <= e) {
         return tree[node];
