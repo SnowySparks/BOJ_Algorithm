@@ -2,7 +2,7 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
-#include <set>
+#include <unordered_set>
 #include <cstring>
 using namespace std;
 using pii = pair<int, int>;
@@ -20,7 +20,7 @@ int now_height = 0;
 vector<io> arr; // (시작점, 입력인덱스, 시작 or 종료)
 vector<pii> ans; // (답)
 priority_queue<pii> pq; // (-높이, 끝점위치)
-set<int> end_lst; // 끝점 리스트 (살펴본 끝점 위치) 저장
+unordered_set<int> end_lst; // 끝점 리스트 (살펴본 끝점 위치) 저장
 
 int main(void) {
     ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
