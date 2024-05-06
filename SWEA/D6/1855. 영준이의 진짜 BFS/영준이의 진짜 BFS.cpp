@@ -60,7 +60,7 @@ int main(void) {
             f(k, 1, 18) p[i][k] = p[p[i][k-1]][k-1];
         }
 
-        f(i, 1, n+1) sort(adj[i].begin(), adj[i].end());
+        // f(i, 1, n+1) sort(adj[i].begin(), adj[i].end());
 
         queue<int> q;
         q.push(1);
