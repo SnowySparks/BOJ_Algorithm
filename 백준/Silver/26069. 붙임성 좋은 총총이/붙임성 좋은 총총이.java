@@ -1,8 +1,8 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
+// import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+// import java.io.OutputStreamWriter;
 import java.util.*;
 
 public class Main {
@@ -12,7 +12,7 @@ public class Main {
     }
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        // BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
         HashSet<String> table = new HashSet<>();
         table.add("ChongChong");
@@ -28,8 +28,9 @@ public class Main {
                 table.add(b);
             }
         }
-        bw.write(Integer.toString(table.size()));
-        bw.close();
+        // bw.write(Integer.toString(table.size()));
+        System.out.print(table.size());
+        // bw.close();
         br.close();
     }
 }
