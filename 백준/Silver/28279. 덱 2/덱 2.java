@@ -4,13 +4,13 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
+    public static StringBuilder pr = new StringBuilder();
     public static void main(String[] args) throws IOException {
         // Input Setting
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
-        StringBuilder pr = new StringBuilder();
         // 자료구조
-        Deque<Integer> dq = new LinkedList<>();
+        Deque<Integer> dq = new ArrayDeque<>();
         int cmd;
         // 시행
         int n = Integer.parseInt(br.readLine());
