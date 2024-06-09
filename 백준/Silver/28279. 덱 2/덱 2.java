@@ -10,7 +10,7 @@ public class Main {
         StringTokenizer st;
         StringBuilder pr = new StringBuilder();
         // 자료구조
-        Deque<Integer> dq = new ArrayDeque<>();
+        Deque<Integer> dq = new LinkedList<>();
         int cmd;
         // 시행
         int n = Integer.parseInt(br.readLine());
