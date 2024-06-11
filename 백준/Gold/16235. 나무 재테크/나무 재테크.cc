@@ -8,7 +8,12 @@ int n, m, k;
 int arr[10][10];
 int nur[10][10];
 using pii = pair<int, int>;
-vector<pii > trees[10][10]; //vectors; <tree age, tree alive>
+
+int trees[10][10][10000];
+int ts[10][10]; //tree_size number
+int tmp[10][10]; // 
+
+// vector<pii > trees[10][10]; //vectors; <tree age, tree alive>
 
 int mv[8][2] = { {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
 
@@ -23,42 +28,43 @@ int main(void) {
         int r, c, z;
         cin >> r >> c >> z;
         r--; c--;
-        trees[r][c].push_back({z,1});
+        trees[r][c][ts[r][c]++] = z;
     }
 
     while (k--)
     {
         //양분먹기
+        memset(tmp, 0, sizeof(tmp));
         f(i, 0, n) f(j, 0, n) {
-            sort(trees[i][j].begin(),  trees[i][j].end()); 
-            for (pii &tree : trees[i][j]) {
-                if (nur[i][j] >= tree.first) {
-                    nur[i][j] -= tree.first;
-                    tree.first+=1;
+            sort(trees[i][j],  trees[i][j]+ts[i][j]); 
+            f(p, 0, ts[i][j]) {
+                if (trees[i][j][p] <= nur[i][j]) {
+                    nur[i][j] -= trees[i][j][p];
+                    trees[i][j][p]++;
+                    tmp[i][j]++;
                 }
-                else {
-                    tree.second = 0;
-                }
+                else break;
             }
         }
 
         //여름 - 즉은 나무 양분화
         f(i, 0, n) f(j, 0, n) {
-            while (!trees[i][j].empty() && trees[i][j].back().second == 0)
-            {
-                nur[i][j] += (trees[i][j].back().first / 2);
-                trees[i][j].pop_back();
+            int cnt = ts[i][j] - tmp[i][j];
+            for (int p = tmp[i][j]; p < ts[i][j]; ++p) {
+                nur[i][j] += (trees[i][j][p]/2);
             }
+            ts[i][j]-=cnt;
         }
 
+        
         //가을 - 번식
         f(i, 0, n) f(j, 0, n) {
-            for (pii &tree : trees[i][j]) {
-                if (tree.first % 5 == 0) {
+            f(p, 0, ts[i][j]) {
+                if (trees[i][j][p]%5==0) {
                     for (auto &[dr, dc] : mv) {
                         int nr = i +dr, nc = j + dc;
                         if (nr < 0 || nr >= n || nc < 0 || nc >= n) continue;
-                        trees[nr][nc].push_back({1, 1});
+                        trees[nr][nc][ts[nr][nc]++] = 1;
                     }
                 }
             }
@@ -66,9 +72,14 @@ int main(void) {
 
         //겨울
         f(i, 0, n) f(j, 0, n) nur[i][j] += arr[i][j];
+        // f(i, 0, n) {
+        //     f(j, 0, n) cout << ts[i][j] <<' ';
+        //     cout << '\n';
+        // }
+        // cout<< "-------\n";
     }
 
     int ans = 0;
-    f(i, 0, n) f(j,0,n) ans += (int) trees[i][j].size();
+    f(i, 0, n) f(j,0,n) ans += ts[i][j];
     cout << ans;
 }
